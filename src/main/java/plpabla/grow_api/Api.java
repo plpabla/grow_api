@@ -1,15 +1,10 @@
 package plpabla.grow_api;
 
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +72,55 @@ public class Api {
         return meas;
     }
 
+    @PostMapping(value =  "/measurement",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> addMeasurement(@RequestBody MeasGrow meas)
+    {
+        Connection connection = null;
+        try
+        {
+            connection = DriverManager.getConnection("jdbc:sqlite:db.sqlite");
+//            Statement statement = connection.createStatement();
+//            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+            String query = "INSERT INTO measurement (board_name, uid, timestamp, temperature, " +
+                    "humidity, pressure, luminance, moisture_a, moisture_b, moisture_c, voltage) " +
+                    "VALUES (?,?,?,?,?,?,?,?,?,?,?) ";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, meas.nickname);
+            ps.setString(2, meas.uid);
+            ps.setInt(3, 0);
+            ps.setDouble(4, meas.getReadings().temperature);
+            ps.setDouble(5, meas.getReadings().humidity);
+            ps.setDouble(6, meas.getReadings().pressure);
+            ps.setDouble(7, meas.getReadings().light);
+            ps.setInt(8,meas.getReadings().moisture_1);
+            ps.setInt(9,meas.getReadings().moisture_2);
+            ps.setInt(10,meas.getReadings().moisture_3);
+            ps.setDouble(11,meas.getReadings().voltage);
+            ps.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            System.err.println(e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e)
+            {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
+
+        return ResponseEntity.ok(0);
+    }
 
     @GetMapping("/demo")
     public String demo()
