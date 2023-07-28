@@ -1,3 +1,9 @@
+# Endpoints
+API enpoints accepts JSON format (`application/json`)
+* `/measurement` 
+  * `GET` get list of all measurements (filtering to be added)
+  * `POST` add a mesaurement
+  * 
 # Database Structure
 ```SQL
 create table measurement
