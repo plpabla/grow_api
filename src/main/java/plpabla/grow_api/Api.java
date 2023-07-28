@@ -30,11 +30,50 @@ public class Api {
         Connection connection = null;
         List<MeasurementDTO> meas = new ArrayList<>();
 
-        MeasurementDTO m = new MeasurementDTO(0,"b1","2423x3", "0", 30.0,
-                69.0, 1020.1, 30, 50, 40, 20, 3.13);
+        try
+        {
+            connection = DriverManager.getConnection("jdbc:sqlite:db.sqlite");
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
-        meas.add(m);
-        meas.add(m);
+            ResultSet rs = statement.executeQuery("select * from measurement");
+            while(rs.next())
+            {
+                // todo: rs.getInt("timestamp") is Int and DTO is String, so I have to add conversion
+                MeasurementDTO m = new MeasurementDTO(
+                        rs.getInt("id"),
+                        rs.getString("board_name"),
+                        rs.getString("uid"),
+                        "timestamp placeholder",
+                        rs.getDouble("temperature"),
+                        rs.getDouble("humidity"),
+                        rs.getDouble("pressure"),
+                        rs.getInt("luminance"),
+                        rs.getInt("moisture_a"),
+                        rs.getInt("moisture_b"),
+                        rs.getInt("moisture_c"),
+                        rs.getDouble("voltage"));
+                meas.add(m);
+            }
+        }
+        catch(SQLException e)
+        {
+            System.err.println(e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e)
+            {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
+
         return meas;
     }
 
