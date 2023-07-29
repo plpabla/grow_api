@@ -22,6 +22,25 @@ API enpoints accepts JSON format (`application/json`)
 }
 ```
 
+# Use with Docker
+Build
+```
+docker image build -t grow_api .
+```
+
+Run container
+```
+docker container run -p 8083:8080 -d grow_api
+```
+
+It will copy empty database, but you can also bind existing db using following syntax
+```
+source="$(pwd)/data"
+dest=/app/data
+
+docker container run --mount type=bind,source=$source,target=$dest -p 8083:8080 -d grow_api
+```
+
 # Database Structure
 ```SQL
 create table measurement
