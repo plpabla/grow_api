@@ -7,23 +7,23 @@ public class MeasurementDTO {
     Integer id;
     String boardName;
     String uid;
-    Integer timestamp;
+    String timestamp;
     Double temperature;
     Double humidity;
     Double pressure;
-    Integer luminance;
-    Integer moistureA;
-    Integer moistureB;
-    Integer moistureC;
+    Double luminance;
+    Double moistureA;
+    Double moistureB;
+    Double moistureC;
     Double voltage;
 
     public MeasurementDTO(Integer id, String boardName, String uid, String timestamp,
-        Double temperature, Double humidity, Double pressure, Integer luminance,
-        Integer moistureA, Integer moistureB, Integer moistureC, Double voltage) {
+        Double temperature, Double humidity, Double pressure, Double luminance,
+                          Double moistureA, Double moistureB, Double moistureC, Double voltage) {
         this.id = id;
         this.boardName = boardName;
         this.uid = uid;
-        this.timestamp = 0;
+        this.timestamp = timestamp;
         this.temperature = temperature;
         this.humidity = humidity;
         this.pressure = pressure;

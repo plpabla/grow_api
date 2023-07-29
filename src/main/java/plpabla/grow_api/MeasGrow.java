@@ -16,10 +16,10 @@ public class MeasGrow {
         public double temperature;
         public double humidity;
         public double pressure;
-        public int light;
-        public int moisture_1;
-        public int moisture_2;
-        public int moisture_3;
+        public double luminance;
+        public double moisture_a;
+        public double moisture_b;
+        public double moisture_c;
         public double voltage;
     }
 }
