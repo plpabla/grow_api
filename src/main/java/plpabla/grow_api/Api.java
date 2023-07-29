@@ -28,7 +28,7 @@ public class Api {
 
         try
         {
-            connection = DriverManager.getConnection("jdbc:sqlite:db.sqlite");
+            connection = DriverManager.getConnection("jdbc:sqlite:data/db.sqlite");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -89,7 +89,7 @@ public class Api {
         Connection connection = null;
         try
         {
-            connection = DriverManager.getConnection("jdbc:sqlite:db.sqlite");
+            connection = DriverManager.getConnection("jdbc:sqlite:data/db.sqlite");
 
             String query = "INSERT INTO measurement (board_name, uid, timestamp, temperature, " +
                     "humidity, pressure, luminance, moisture_a, moisture_b, moisture_c, voltage) " +
