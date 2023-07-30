@@ -44,6 +44,16 @@ dest=/app/data
 docker container run --mount type=bind,source=$source,target=$dest -p 8083:8080 -d grow_api
 ```
 
+Note: you can also use published image
+```
+docker container run --mount type=bind,source=$source,target=$dest -p 8083:8080 -d plpabla/grow_api:latest
+```
+
+And for Raspbery Pi use the one with arm64 tag, e.g. 
+```
+docker container run --mount type=bind,source=/home/pi/data,target=/app/data -p 8080:8080 --restart always -d plpabla/grow_api:arm64
+```
+
 # Database Structure
 ```SQL
 create table measurement
