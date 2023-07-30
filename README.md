@@ -44,11 +44,6 @@ dest=/app/data
 docker container run --mount type=bind,source=$source,target=$dest -p 8083:8080 -d grow_api
 ```
 
-Note: you can also use published image
-```
-docker container run --mount type=bind,source=$source,target=$dest -p 8083:8080 -d plpabla/grow_api:latest
-```
-
 # Database Structure
 ```SQL
 create table measurement
