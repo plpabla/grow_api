@@ -3,6 +3,9 @@ API enpoints accepts JSON format (`application/json`)
 * `/measurement` 
   * `GET` get list of all measurements (filtering to be added)
   * `POST` add a mesaurement. Message structure
+* `/measurement/last`
+  * `GET` display last measurement timestamp and moisture in a plain text
+
 ```json
 {
   "readings": {
@@ -59,5 +62,4 @@ create table measurement
   moisture_c  REAL,
   voltage     REAL
 );
-
 ```

@@ -18,6 +18,61 @@ public class Api {
         return "pong.";
     }
 
+    @GetMapping(value="/measurement/last")
+    public String getLastMeasurement()
+    {
+        Connection connection = null;
+        MeasurementDTO m = null;
+        try
+        {
+            connection = DriverManager.getConnection("jdbc:sqlite:data/db.sqlite");
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+            ResultSet rs = statement.executeQuery(
+                    "SELECT * FROM measurement WHERE id = (SELECT MAX(id) FROM measurement)");
+            while(rs.next())
+            {
+                Instant instant = Instant.ofEpochSecond(rs.getInt("timestamp"));
+                String timestamp_str = instant.toString();
+
+                m = new MeasurementDTO(
+                        rs.getInt("id"),
+                        rs.getString("board_name"),
+                        rs.getString("uid"),
+                        timestamp_str,
+                        rs.getDouble("temperature"),
+                        rs.getDouble("humidity"),
+                        rs.getDouble("pressure"),
+                        rs.getDouble("luminance"),
+                        rs.getDouble("moisture_a"),
+                        rs.getDouble("moisture_b"),
+                        rs.getDouble("moisture_c"),
+                        rs.getDouble("voltage"));
+            }
+        }
+        catch(SQLException e)
+        {
+            System.err.println(e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e)
+            {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
+        String msg = String.format("t=%s, m_a=%.2f, m_b=%.2f, m_c=%.3f",
+            m.getTimestamp(), m.getMoistureA(), m.getMoistureB(), m.getMoistureC());
+        return msg;
+    }
+
     @GetMapping(value = "/measurement",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces=MediaType.APPLICATION_JSON_VALUE)
